@@ -1,0 +1,117 @@
+<%- include('header'); -%> 
+
+<div class="container-fluid w-auto">
+    <h1 style="text-align: center; color: white; background-color: black;">STOCKS</h1>
+    <br>
+    <button class="btn btn-primary float-end w-25 p-2" type="button" onclick="window.location.href='/newItem'">Add New Item</button>
+    <br> <br> <p></p>
+    <table id="stocksTable" class="table table-striped table-bordered table-hover table-responsive">
+        <thead class="table-dark">
+            <th>Item #</th>
+            <th>Item</th>
+            <th>Qty Available</th>
+            <th>UOM</th>
+            <th>Size</th>
+            <th>Category</th>
+            <th>Brand</th>
+            <th>Type</th>
+            <th>Cost Price</th>
+            <th>Sell Price</th>
+            <th>HSN</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+          <% table.forEach(function(data) { %> 
+            <tr>
+                <td><%= data.row_id %></td>
+                <td style="font-weight: bold;"><%= data.item_name %></td>
+                <td><%= data.qty_stock %></td>
+                <td><%= data.uom %></td>
+                <td><%= data.size %></td>
+                <td><%= data.item_category %></td>
+                <td><%= data.brand %></td>
+                <td><%= data.type %></td>
+                <td><%= data.cost_price %></td>
+                <td><%= data.sell_price %></td>
+                <td><%= data.hsn %></td>
+                <td>
+                  <div class="d-inline-flex p-2 bd-highlight">
+                    <button id="updateBtn" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal" onclick="onEdit(this)">Update</button>
+                  </div>
+                </td>
+            </tr>
+            <% }); %>  
+        </tbody>
+    </table>
+</div>
+  
+  <!-- Modal Update -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">UPDATE DATA</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/update_stocksTable" method="post">
+                <div class="mb-3">
+                  <label for="item_no" class="form-label">Item #</label>
+                  <input type="text" class="form-control" id="item_no" name="item_no" autocomplete="off" readonly/>
+                </div>
+                <div class="mb-3">
+                  <label for="item_name" class="form-label">Item</label>
+                  <input type="text" class="form-control" id="item_name" name="item_name" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                    <label for="qty_available" class="form-label">Qty Available</label>
+                    <input type="text" class="form-control" id="qty_available" name="qty_available" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="uom" class="form-label">UOM</label>
+                  <input type="text" class="form-control" id="uom" name="uom" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="size" class="form-label">Size</label>
+                  <input type="text" class="form-control" id="size" name="size" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="category" class="form-label">Category</label>
+                  <input type="text" class="form-control" id="category" name="category" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="brand" class="form-label">Brand</label>
+                  <input type="text" class="form-control" id="brand" name="brand" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Type</label>
+                    <select name="type" class="form-select" id="type" aria-label="Default select example">
+                        <option>Raw</option>
+                        <option>Finished</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                  <label for="cp" class="form-label">Cost Price</label>
+                  <input type="number" class="form-control" id="cp" name="cp" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="sp" class="form-label">Sell Price</label>
+                  <input type="number" class="form-control" id="sp" name="sp" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                  <label for="hsn" class="form-label">HSN</label>
+                  <input type="text" class="form-control" id="hsn" name="hsn" autocomplete="off"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div> 
+            </form>    
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="js/stocks.js"></script>
+
+<%- include('footer'); -%>

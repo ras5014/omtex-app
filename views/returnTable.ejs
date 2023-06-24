@@ -1,0 +1,98 @@
+<%- include('header'); -%> 
+
+<div class="container-fluid w-auto">
+    <h1 style="text-align: center; color: white; background-color: black;">RETURNS</h1>
+    <br>
+    <button onclick="window.location.href='/returnForm'" type="button" class="btn btn-primary float-end w-25 p-2">Add New Return</button>
+    <br> <br> <p></p>
+    <table id="returnTable" class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+          <th>Return #</th>
+          <th>Type</th>
+          <th>Party Name</th>
+          <th>Return By</th>
+          <th>Total Price Returned</th>
+          <th>Date</th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <% table.forEach(function(data) { %> 
+            <tr>
+                <td><%= data.return_id %></td>
+                <td><%= data.type %></td>
+                <td><%= data.party_name %></td>
+                <td><%= data.return_by %></td>
+                <td><%= data.total_return_price %></td>
+                <td><%= data.date %></td>
+                <td>
+                  <div class="d-inline-flex p-2 bd-highlight">
+                    <form action="/showReturnDetails" method="post">
+                      <button id="detailsBtn" type="submit" class="btn btn-info" name="row_id" value= <%= data.row_id %>>Details</button>
+                      <input type="hidden" name="return_id" value="<%= data.return_id %>">
+                      <input type="hidden" name="type" value="<%= data.type %>">
+                      <input type="hidden" name="party_name" value="<%= data.party_name %>">
+                      <input type="hidden" name="total_return_price" value="<%= data.total_return_price %>">
+                      <input type="hidden" name="date" value="<%= data.date %>">
+                    </form>
+                  </div>
+                </td>
+            </tr>
+            <% }); %>  
+        </tbody>
+    </table>
+</div>
+  
+  <!-- Modal Update -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">UPDATE DATA</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/updatePurchaseTable" method="post">
+                <div class="mb-3">
+                  <label for="invoice_no" class="form-label">Invoice #</label>
+                  <input type="text" class="form-control" id="invoice_no" name="invoice_no" autocomplete="off" readonly/>
+                </div>
+                <div class="mb-3">
+                    <label for="vendor" class="form-label">Vendor</label>
+                    <input type="text" class="form-control" id="vendor" name="vendor" autocomplete="off" readonly/>
+                </div>
+                <div class="mb-3">
+                    <label for="physically_received_status" class="form-label">Physically Received Status</label>
+                    <select name="physically_received_status" class="form-select" id="physically_received_status" aria-label="Default select example">
+                        <option disabled>NO</option>
+                        <option>YES</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="transport_charge" class="form-label">Transport Charge</label>
+                    <input type="number" class="form-control" step="0.01" min="0" id="transport_charge" name="transport_charge" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                    <label for="trolly_charge" class="form-label">Trolly Charge</label>
+                    <input type="number" class="form-control" step="0.01" min="0" id="trolly_charge" name="trolly_charge" autocomplete="off"/>
+                </div>
+                <div class="mb-3">
+                    <label for="payment_status" class="form-label">Payment Status</label>
+                    <select name="payment_status" class="form-select" id="payment_status" aria-label="Default select example">
+                        <option>Unpaid</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+                 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div> 
+            </form>    
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="js/returnTable.js"></script>
+
+<%- include('footer'); -%> 

@@ -1,0 +1,137 @@
+body {
+    font-family: "Lato", sans-serif;
+    transition: background-color .5s;
+  }
+  
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+    background-color: #C84B31;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  #main {
+    transition: margin-left .5s;
+    padding: 16px;
+  }
+
+  #mainhover:hover {
+    color: #f1f1f1;
+    background-color: #C84B31;
+    transition: 0.3s;
+  }
+
+  #closeBtn:hover {
+    background-color: #C84B31;
+    padding: 20px;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  .modal {
+    width: 750px;
+    margin: auto;
+  }
+
+  #salesType {
+    padding: 4px;
+    background-color: #C84B31;
+    color: white;
+    width: 440px;
+  }
+
+  .paymentForm {
+    background-color: #DDDDDD; 
+    padding: 50px 100px 50px 100px;
+    margin: 100px;
+    border-radius: 10px;
+  }
+
+  .newItemForm {
+    background-color: #DDDDDD; 
+    padding: 50px 100px 50px 100px;
+    margin: 100px;
+    border-radius: 10px;
+  }
+
+.newItem_select { 
+    text-align-last:center; 
+  }
+
+#cashRow {
+  margin-right: 20px;
+  padding: 10px;
+  font-weight: bold;
+  color: white;
+  background-color: #C84B31;
+  text-align: center;
+}
+
+
+/**/
+
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.custom-dropdown-content {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 0;
+  display: none;
+  background-color: #f9f9f9;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  width: 100%;
+}
+
+.custom-dropdown-content li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.custom-dropdown-content li:hover {
+  background-color: #e6e6e6;
+}

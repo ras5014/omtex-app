@@ -1,0 +1,171 @@
+<%- include('header'); -%>
+<br> <p></p>
+
+<div class="container-fluid d-flex justify-content-center">
+    <div class="btn-group btn-group-lg" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="form_issue_petticoat" autocomplete="off" checked>
+        <label class="btn btn-outline-primary" for="payment_to_give_btn">Issue Form for Petticoat</label>
+      
+        <input type="radio" class="btn-check" name="btnradio" id="recieve_form_petticoat" autocomplete="off">
+        <label class="btn btn-outline-primary" for="payment_to_receive_btn">Recieve Form for Petticoat</label>
+      
+        <input type="radio" class="btn-check" name="btnradio" id="wager_petticoat" autocomplete="off">
+        <label class="btn btn-outline-primary" for="btnradio3">Set Wager for Petticoat</label>
+    </div>
+</div>
+
+<div class="container-sm clearfix mx-auto paymentForm" id="form_issue_petticoat">
+    
+    <form action="/production" method="post">
+
+      <div class="row d-flex justify-content-center">
+        <label for="date1" class="col-sm-2 col-form-label col-form-label-lg">Date :</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-lg text-center" id="date1" name="date1" value="<%= formattedDate %>" autocomplete="off" required>
+        </div>
+      </div>
+  <br>
+      <div class="row d-flex justify-content-center">
+        <label for="cutomer" class="col-sm-2 col-form-label col-form-label-lg">Customer Name :</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-lg text-center" id="customer" name="customer" list="CustomerList" placeholder="Enter Customer Name" autocomplete="off" required>
+            <datalist id="CustomerList">
+              <% customer_array.forEach(function(data) { %> 
+                <option value= "<%= data.customer_name %>" >
+              <% }); %>
+            </datalist>
+        </div>
+      </div>
+  <br>
+      <div class="row d-flex justify-content-center">
+        <label for="payment_received" class="col-sm-2 col-form-label col-form-label-lg">Payment Received :</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control form-control-lg text-center" id="payment_received" name="payment_received" placeholder="Enter Amount" autocomplete="off" required>
+        </div>
+      </div>
+
+  <p></p> <br> <br>
+      <div class="d-grid gap-2 col-8 mx-auto">
+        <button class="btn btn-primary fs-3" type="submit">Submit To Database</button>
+      </div>
+
+    </form>
+  </div>
+
+
+
+<div class="container-sm clearfix mx-auto paymentForm" id="payment_to_give">
+    
+    <form action="/paymentGiven" method="post">
+
+      <div class="row d-flex justify-content-center">
+        <label for="date2" class="col-sm-2 col-form-label col-form-label-lg">Date :</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-lg text-center" id="date2" name="date2" value="<%= formattedDate %>" autocomplete="off" required>
+        </div>
+      </div>
+  <br>
+  
+      <div class="row d-flex justify-content-center">
+        <label for="invoice_no" class="col-sm-2 col-form-label col-form-label-lg">Invoice NO :</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-lg text-center" id="invoice_no" name="invoice_no" list="InvoiceList" placeholder="Enter Invoice Number" autocomplete="off" required>
+          <datalist id="InvoiceList">
+            <% invoice_array.forEach(function(data) { %> 
+              <option value= "<%= data.invoice_no %>" >
+            <% }); %>
+          </datalist>
+        </div>
+      </div>
+  <br>
+      <div class="row d-flex justify-content-center">
+        <label for="vendor" class="col-sm-2 col-form-label col-form-label-lg">Vendor Name :</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control form-control-lg text-center" id="vendor" name="vendor" list="VendorList" placeholder="Enter Vendor Name" autocomplete="off" required>
+            <datalist id="VendorList">
+              <% vendor_array.forEach(function(data) { %> 
+                <option value= "<%= data.vendor_name %>" >
+              <% }); %>
+            </datalist>
+        </div>
+      </div>
+  <br>
+      <div class="row d-flex justify-content-center">
+        <label for="payment_given" class="col-sm-2 col-form-label col-form-label-lg">Payment Given :</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control form-control-lg text-center" id="payment_given" name="payment_given" placeholder="Enter Amount" autocomplete="off" required>
+        </div>
+      </div>
+  
+      <p></p> <br> <br>
+      <div class="d-grid gap-2 col-8 mx-auto">
+        <button class="btn btn-primary fs-3" type="submit">Submit To Database</button>
+      </div>
+  
+    </form>
+  </div>
+
+<div class="container-fluid clearfix" id="pmnt_to_vendors">
+  <table id="payments_to_vendors" class="table table-striped table-bordered table-hover table-responsive">
+    <thead class="table-dark">
+        <th>Payment #</th>
+        <th>Invoice #</th>
+        <th>Vendor</th>
+        <th>Amount Given</th>
+        <th>Date</th>
+        <!-- <th>Action</th> -->
+    </thead>
+    <tbody>
+      <% table1.forEach(function(data) { %> 
+        <tr>
+            <td><%= data.row_id %></td>
+            <td><%= data.invoice_no %></td>
+            <td><%= data.vendor_name %></td>
+            <td><%= data.payment_given %></td>
+            <td><%= data.date %></td>
+            <!-- <td>
+              <div class="d-inline-flex p-2 bd-highlight">
+                <form action="/delete_paymentGiven" method="post" onsubmit="return confirm('Are you sure?');">
+                  <button id="deleteBtn" type="submit" class="btn btn-danger" name="deletedItem" value="<%= data.row_id %>" disabled>Delete</button>
+                  <input type="hidden" name="invoice_no1" value="<%= data.invoice_no %>">
+                </form>
+              </div>
+            </td> -->
+        </tr>
+        <% }); %>  
+    </tbody>
+</table>
+</div>
+
+<div class="container-fluid clearfix" id="pmnt_from_customers">
+  <table id="payments_from_customers" class="table table-striped table-bordered table-hover table-responsive">
+    <thead class="table-dark">
+        <th>Payment #</th>
+        <th>Customer</th>
+        <th>Amount Received</th>
+        <th>Date</th>
+        <!-- <th>Action</th> -->
+    </thead>
+    <tbody>
+      <% table2.forEach(function(data) { %> 
+        <tr>
+            <td><%= data.row_id %></td>
+            <td><%= data.customer_name %></td>
+            <td><%= data.payment_received %></td>
+            <td><%= data.date %></td>
+            <!-- <td>
+              <div class="d-inline-flex p-2 bd-highlight">
+                <form action="/delete_paymentReceived" method="post" onsubmit="return confirm('Are you sure?');">
+                  <button id="deleteBtn" type="submit" class="btn btn-danger" name="deletedItem1" value= <%= data.row_id %> disabled>Delete</button>
+                </form>
+              </div>
+            </td> -->
+        </tr>
+        <% }); %>  
+    </tbody>
+</table>
+</div>
+
+<script type="text/javascript" src="js/payments.js"></script>
+
+<%- include('footer'); -%>

@@ -1,0 +1,111 @@
+<%- include('header'); -%> 
+
+  <div class="container-fluid w-auto">
+
+        <h1 style="text-align: center; color: white; background-color: black;">RETURN BILL DETAILS</h1>
+        <form action="/returnForm" method="post">
+              <div style="margin-top:30px" class="col-md-12 clearfix">
+                
+
+                    <div class="form-group clearfix" id="returnType">
+                      <label for="return_type" class="me-3 fs-4">Return Type</label>
+                    
+                        <select style="display:inline;" name="type" id="type" class="form-select w-auto" aria-label="Default select example">
+                            <option selected>Return From Customer</option>
+                            <option >Return To Vendor</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                  <br> <br>
+                  <div class="clearfix row gx-3 gy-2 align-items-center">
+                    
+                    <div class="col-sm-3">
+                        <input type="text" name='return_id' class="form-control return_id" placeholder="Enter ReturnID Number" autocomplete="off"/>
+                    </div>
+            
+                    <div class="col-sm-3">
+                      <input class="form-control return_by" name="return_by" list="SalesmanList" id="return_by" placeholder="Return Employee" autocomplete="off">
+                        <datalist id="SalesmanList">
+                            <% salesman_array.forEach(function(data) { %> 
+                                <option value= "<%= data.employee_name %>" >
+                            <% }); %>
+                        </datalist>
+                    </div>
+            
+                    <div class="col-sm-3">
+                        <input type="text" name='date' class="form-control" value="<%= formattedDate %>" autocomplete="off"/>
+                    </div>
+            
+                    <div class="col-sm-3">
+                        <input class="form-control party_name" name="party_name" list="CustomerList" id="party_name" placeholder="Enter Customer Name" autocomplete="off">
+                            <datalist id="CustomerList">
+                                <% customer_array.forEach(function(data) { %> 
+                                    <option value= "<%= data.customer_name %>" >
+                                <% }); %>
+                                <% vendor_array.forEach(function(data) { %>
+                                    <option value= "<%= data.vendor_name %>" ></option>
+                                <% }); %>
+                            </datalist>
+                    </div>
+
+                </div>
+                    <br> <br>
+                    <div class="col-md-12 clearfix">
+                        <table class="table table-striped table-bordered table-hover" id="tab_logic">
+                            <thead class="table-dark">
+                              <tr>
+                                <th class="text-center" scope="col">#</th>
+                                <th class="text-center" scope="col">Item Name</th>
+                                <th class="text-center" scope="col">Qty</th>
+                                <th class="text-center" scope="col">Price</th>
+                                <th class="text-center" scope="col">Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr id="addr0">
+                                <td>1</td>
+                                <td>
+                                  <input class="form-control w-100 item_name" name="item_name[]" list="ItemList" id="item_name" placeholder="Type to search..." autocomplete="off">
+                                    <datalist id="ItemList">
+                                      <% item_array.forEach(function(data) { %> 
+                                        <option value= "<%= data.item_name %>" >
+                                      <% }); %> 
+                                    </datalist>
+                                </td>
+                                <td><input type="number" name='qty[]' class="form-control qty" step="0" min="0" autocomplete="off"/></td>
+                                <td><input type="number" name='price[]' class="form-control price" step="0.01" min="0" autocomplete="off"/></td>
+                                <td><input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/></td>
+                              </tr>
+                              <tr id="addr1"></tr>
+                            </tbody>
+                          </table>
+                    </div>
+            
+                      <div class="col-md-12 clearfix">
+                        <button type="button" id="add_row" class="btn btn-success float-end">Add Row</button>
+                        <button type="button" id='delete_row' class="float-start btn btn-danger">Delete Row</button>
+                      </div>
+            
+                      <div style="margin-top:70px" class="col-md-6 float-end clearfix">
+                        <table class="table table-striped table-bordered table-hover" id="tab_logic_total">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">Grand Total</th>
+                                    <td class="text-center"><input type="number" name='total_return_price' id="total_return_price" placeholder='0.00' class="form-control" readonly/></td>
+                                </tr>
+                            </tbody>
+                          </table>
+                      </div>
+    
+                      <div style="margin-top:330px" class="clearfix">
+                        <button type="submit" class="btn btn-primary float-end">Submit Data to Database</button>
+                      </div>
+                    
+              </div>
+            </form>
+        </div>
+
+        <script type="text/javascript" src="js/returnForm.js"></script>
+        
+<%- include('footer'); -%> 

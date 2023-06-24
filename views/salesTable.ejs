@@ -1,0 +1,101 @@
+<%- include('header'); -%> 
+<br><br>
+<% if(message == 'Insufficient Stocks, Can not convert to Sales') { %>
+  <div style="text-align: center;" class="alert alert-danger alert-dismissible">
+    <strong><%= message %></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+<% if(message == 'Converted to Sales Successfully') { %>
+  <div style="text-align: center;" class="alert alert-success alert-dismissible">
+    <strong><%= message %></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+<div class="container-fluid w-auto">
+    <h1 style="text-align: center; color: white; background-color: black;">SALES</h1>
+    <br>
+    <button class="btn btn-primary float-end w-25 p-2" type="button" onclick="window.location.href='/salesForm'">Add New Sales</button>
+    <br> <br> <p></p>
+    <table id="salesTable" class="table table-striped table-bordered table-hover table-responsive">
+        <thead class="table-dark">
+            <th>Invoice #</th>
+            <th>Customer</th>
+            <th>Grand Total</th>
+            <th>Type</th>
+            <th>Salesman</th>
+            <th>Date</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+          <% table.forEach(function(data) { %> 
+            <tr>
+                <td><%= data.invoice_no %></td>
+                <td><%= data.customer_name %></td>
+                <td><%= data.grand_total %></td>
+                <td><%= data.type %></td>
+                <td><%= data.salesman %></td>
+                <td><%= data.date %></td>
+                <td>
+                  <div class="d-inline-flex p-2 bd-highlight">
+                    <button style="margin-right: 10px;" id="updateBtn" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal" onclick="onEdit(this)">Update</button>
+                    <form action="/deleteSalesTable" method="post" onsubmit="return confirm('Are you sure?');">
+                      <input type="hidden" name= "type" value= <%= data.type %>>
+                      <button style="margin-right: 10px;" id="deleteBtn" type="submit" class="btn btn-danger" name="deletedItem" value= <%= data.invoice_no %>>Delete</button>
+                    </form>
+                    <form action="/showSalesDetails" method="post">
+                      <button id="detailsBtn" type="submit" class="btn btn-info" name="invoice_number" value= <%= data.invoice_no %>>Details</button>
+                      <input type="hidden" name="customerName" value="<%= data.customer_name %>">
+                      <input type="hidden" name="grandTotal" value="<%= data.grand_total %>">
+                      <input type="hidden" name="cashDiscount" value="<%= data.cash_discount %>">
+                      <input type="hidden" name="date" value="<%= data.date %>">
+                      <input type="hidden" name="subTotal" value="<%= data.sub_total %>">
+                    </form>
+                  </div>
+                </td>
+            </tr>
+            <% }); %>  
+        </tbody>
+    </table>
+</div>
+  
+  <!-- Modal Update -->
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">UPDATE DATA</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/updateSalesTable" method="post">
+                <div class="mb-3">
+                  <label for="invoice_no" class="form-label">Invoice #</label>
+                  <input type="text" class="form-control" id="invoice_no" name="invoice_no" autocomplete="off" readonly/>
+                </div>
+                <div class="mb-3">
+                    <label for="customer" class="form-label">Customer</label>
+                    <input type="text" class="form-control" id="customer" name="customer" autocomplete="off" readonly/>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Type</label>
+                    <select name="type" class="form-select" id="type" aria-label="Default select example">
+                        <option disabled>Estimate</option>
+                        <option>Sales</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div> 
+            </form>    
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript" src="js/salesTable.js"></script>
+
+<%- include('footer'); -%>

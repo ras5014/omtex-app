@@ -1,0 +1,100 @@
+<%- include('header'); -%> 
+
+<div class="container-fluid w-auto">
+    <h1 style="text-align: center; color: white; background-color: black;">CASH BOOK</h1>
+    <br>
+    <div class="container-fluid">
+      <div class="row">
+        <div style="background-color: green;" id="cashRow" class="col">
+          <p>Amount in Bank <br> <span style="font-size: 30px;"><%= amount_in_bank %>/-</span> </p>
+        </div>
+        <div style="background-color: #C84B31;" id="cashRow" class="col">
+          <p>Amount in Cash <br> <span style="font-size: 30px;"><%= amount_in_cash %>/-</span> </p>
+        </div>
+        <button style="margin-right: 20px; font-weight: bold;" class="btn btn-danger float-end w-25 p-2" type="button" data-bs-toggle="modal" data-bs-target="#bankDepositModal">ADD BANK DEPOSIT</button>
+        <button style="margin-right: 20px; font-weight: bold;" class="btn btn-danger float-end w-25 p-2" type="button" data-bs-toggle="modal" data-bs-target="#selfWithdrawModal">WITHDRAW</button>
+      </div>
+    </div>
+    <br> <br> <p></p>
+    <table id="cashBook_Table" class="table table-striped table-bordered table-hover table-responsive">
+        <thead class="table-dark">
+            <th>Date</th>
+            <th>Remark</th>
+            <th>Amount</th>
+            <th>Balance</th>
+        </thead>
+        <tbody>
+          <% table.forEach(function(data) { %> 
+            <tr>
+                <td><%= data.date %></td>
+                <td><%= data.remark %></td>
+                <td style="font-weight: bold;"><%= data.amount %></td>
+                <td><%= data.balance %></td>
+            </tr>
+          <% }); %>  
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal For Bank Deposit -->
+<div class="modal fade" id="bankDepositModal" tabindex="-1" aria-labelledby="bankDepositModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Bank Deposit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form action="/bankDeposit" method="post">
+              <div class="mb-3">
+                  <label for="amount_to_bank" class="form-label">Amount to Bank</label>
+                  <input type="number" class="form-control" step="0.01" min="0" id="amount_to_bank" name="amount_to_bank" autocomplete="off"/>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+              </div> 
+          </form>    
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal For Self Withdraw -->
+<div class="modal fade" id="selfWithdrawModal" tabindex="-1" aria-labelledby="selfWithdrawModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Bank Deposit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form action="/withdraw" method="post">
+              <div class="mb-3">
+                  <label for="withdraw_amount" class="form-label">Amount Withdrawn</label>
+                  <input type="number" class="form-control" step="0.01" min="0" id="withdraw_amount" name="withdraw_amount" autocomplete="off"/>
+              </div>
+
+              <div class="custom-dropdown mb-3 w-100">
+                <label for="myInput" class="form-label">Reason</label>
+                <input type="text" id="myInput" name="reason" class="custom-input form-control" autocomplete="off"/>
+                <ul id="myDropdown" class="custom-dropdown-content">
+                  <li>From Bank to Business Cash (Amount will be added to Cash in hand)</li>
+                  <li>Withdraw for Self from Bank (Amount will be gone from Business Account)</li>
+                  <li>Withdraw for Self from Cash (Amount will be gone from Business Account)</li>
+                </ul>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+              </div> 
+          </form>    
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="js/cashbook.js"></script>
+
+<%- include('footer'); -%>
