@@ -1,7 +1,6 @@
 let express = require('express');
 let bodyParser = require('body-parser');
-let mysql = require('mysql2');
-require('dotenv').config();
+let mysql = require('mysql');
 let app = express();
 let _ = require('lodash');
 app.use(bodyParser.urlencoded({extended: true}));
