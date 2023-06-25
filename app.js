@@ -1,6 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
-let mysql = require('mysql');
+let mysql = require('mysql2');
+require('dotenv').config();
 let app = express();
 let _ = require('lodash');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,9 +19,9 @@ app.use(session({
 app.use(flash());
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '34.93.233.252',
     user: 'root',
-    password: 'root',
+    password: 'Ashok1963',
     database: 'omtex'
 });
 
@@ -565,7 +566,7 @@ app.get("/production", function(req, res) {
 });
 
 
-app.listen(3000, function(req, res) {
+app.listen(3000 || process.env.PORT, function(req, res) {
     console.log("Server has started on http://localhost:3000");
 });
 
