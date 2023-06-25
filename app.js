@@ -50,7 +50,7 @@ const formattedDate = date.toLocaleString("en-GB", {
 db.connect(function (err) {
     if (err) {
         console.log("Database Not Connected" + err.message);
-        alert("Database Not Connected");
+        console.log("Database Not Connected");
     } else {
         console.log("Database Connected");
     }
