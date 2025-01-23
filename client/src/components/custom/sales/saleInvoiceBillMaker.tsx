@@ -1,179 +1,273 @@
 "use client"
 
-import { useState } from "react"
+import { useForm, useFieldArray } from "react-hook-form"
 import { Plus, Trash2 } from 'lucide-react'
 import { v4 as uuidv4 } from "uuid"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { DatePicker } from "./DatePicker"
 
-interface InvoiceItem {
-  id: string
-  itemName: string
-  quantity: number
-  price: number
-  discount: number
-  taxableValue: number
-  cgst: number
-  sgst: number
-  igst: number
-  total: number
+interface FormValues {
+  date: Date
+  invoiceNumber: string
+  customer: string
+  gstNumber: string
+  billingAddress: string
+  shippingAddress: string
+  items: {
+    id: string
+    itemName: string
+    hsnSac: string
+    quantity: number
+    price: number
+    discount: number
+    taxableValue: number
+    cgst: number
+    sgst: number
+    igst: number
+    total: number
+  }[]
+  cashDiscount: number
 }
 
 export default function SalesInvoiceBillMaker() {
-  const [items, setItems] = useState<InvoiceItem[]>([
-    { id: uuidv4(), itemName: "", quantity: 0, price: 0, discount: 0, taxableValue: 0, cgst: 0, sgst: 0, igst: 0, total: 0 },
-  ])
+  const { register, control, handleSubmit, watch, setValue } = useForm<FormValues>({
+    defaultValues: {
+      items: [{
+        id: uuidv4(),
+        itemName: "",
+        hsnSac: "",
+        quantity: 0,
+        price: 0,
+        discount: 0,
+        taxableValue: 0,
+        cgst: 0,
+        sgst: 0,
+        igst: 0,
+        total: 0
+      }],
+      cashDiscount: 0,
+    }
+  })
 
-  const addRow = () => {
-    setItems([...items, { id: uuidv4(), itemName: "", quantity: 0, price: 0, discount: 0, taxableValue: 0, gst: 0, gstValue: 0, total: 0 }])
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "items"
+  })
+
+  const onSubmit = (data: FormValues) => {
+    console.log('Form Data:', data)
   }
 
-  const removeRow = (id: string) => {
-    setItems(items.filter((item) => item.id !== id))
-  }
+  const calculateItemValues = (index: number) => {
+    const items = watch('items')
+    const item = items[index]
 
-  const updateItem = (id: string, field: keyof InvoiceItem, value: string | number) => {
-    setItems(
-      items.map((item) => {
-        if (item.id === id) {
-          const updatedItem = { ...item, [field]: field === "itemName" ? value : Number(value) }
-          updatedItem.taxableValue = updatedItem.quantity * updatedItem.price * (1 - updatedItem.discount / 100)
-          updatedItem.cgst = updatedItem.taxableValue * (updatedItem.cgst / 100)
-          updatedItem.sgst = updatedItem.taxableValue * (updatedItem.sgst / 100)
-          updatedItem.igst = updatedItem.taxableValue * (updatedItem.igst / 100)
-          updatedItem.total = updatedItem.taxableValue + updatedItem.cgst + updatedItem.sgst + updatedItem.igst
-          return updatedItem
-        }
-        return item
-      })
-    )
+    const taxableValue = item.quantity * item.price * (1 - item.discount / 100)
+    const cgstValue = taxableValue * (item.cgst / 100)
+    const sgstValue = taxableValue * (item.sgst / 100)
+    const igstValue = taxableValue * (item.igst / 100)
+    const total = taxableValue + cgstValue + sgstValue + igstValue
+
+    setValue(`items.${index}.taxableValue`, taxableValue)
+    setValue(`items.${index}.total`, total)
   }
 
   const calculateSubTotal = () => {
-    return items.reduce((total, item) => total + item.total, 0)
+    return watch('items').reduce((total, item) => total + (item.total || 0), 0)
   }
 
-  const [cashDiscount, setCashDiscount] = useState(0)
-  const [amountPaid, setAmountPaid] = useState(0)
-
   const calculateGrandTotal = () => {
-    return calculateSubTotal() - cashDiscount
+    const grandTotal = calculateSubTotal() - (watch('cashDiscount') || 0);
+    return Math.round(Math.abs(grandTotal));
   }
 
   return (
     <Card className="w-full dark:bg-inherit border-spacing-5 dark:border-gray-600 rounded-xl shadow-lg m-auto p-10">
-      <CardContent className="space-y-6">
-        <form className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CardContent className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-4">
-              <div className="space-y-2">
-                <DatePicker />
+              <DatePicker />
+              <div className="space-y-2 flex items-center">
+                <Label className="w-1/3">Invoice #</Label>
+                <Input {...register("invoiceNumber")} className="w-2/3" />
               </div>
               <div className="space-y-2 flex items-center">
-                <Label htmlFor="invoice_no" className="text-foreground dark:text-gray-200 w-1/3 text-md">Invoice #</Label>
-                <Input type="text" placeholder="Enter Invoice Number" className="bg-background dark:bg-gray-700 dark:text-gray-100 p-5 rounded-xl w-2/3" />
+                <Label className="w-1/3">Customer</Label>
+                <Input {...register("customer")} className="w-2/3" />
               </div>
-              <hr className="dark:border-gray-600" />
               <div className="space-y-2 flex items-center">
-                <Label htmlFor="invoice_no" className="text-foreground dark:text-gray-200 w-1/3 text-md">Customer</Label>
-                <Input type="text" placeholder="Enter Invoice Number" className="bg-background dark:bg-gray-700 dark:text-gray-100 p-5 rounded-xl w-2/3" />
+                <Label className="w-1/3">GST #</Label>
+                <Input {...register("gstNumber")} className="w-2/3" />
               </div>
-              <hr className="dark:border-gray-600" />
-              <div className="space-y-2 flex items-center">
-                <Label htmlFor="invoice_no" className="text-foreground dark:text-gray-200 w-1/3 text-md">GST #</Label>
-                <Input type="text" placeholder="Enter Invoice Number" className="bg-background dark:bg-gray-700 dark:text-gray-100 p-5 rounded-xl w-2/3" />
-              </div>
-              <hr className="dark:border-gray-600" />
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-foreground dark:text-gray-200 text-md">Billing Address</Label>
-              <Textarea id="billing_address" name="billing_address" placeholder="Enter Billing Address" className="rounded-xl p-5 bg-background dark:bg-gray-700 dark:text-gray-100 h-[200px]" />
+            <div className="space-y-2 p-8">
+              <Label>Billing Address</Label>
+              <Textarea {...register("billingAddress")} />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="shipping_address" className="text-foreground dark:text-gray-200 text-md">Shipping Address</Label>
-              <Textarea id="shipping_address" name="shipping_address" placeholder="Enter Shipping Address" className="rounded-xl p-5 bg-background dark:bg-gray-700 dark:text-gray-100 h-[200px]" />
+            <div className="space-y-2 p-8">
+              <Label>Shipping Address</Label>
+              <Textarea {...register("shippingAddress")} />
             </div>
           </div>
 
-
-
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted dark:bg-gray-700">
-                  <TableHead className="text-foreground dark:text-gray-200">#</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Item Name</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Qty</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Price</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Discount %</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Taxable Value</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">CGST %</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">SGST %</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">IGST %</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Total</TableHead>
-                  <TableHead className="text-foreground dark:text-gray-200">Actions</TableHead>
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted dark:bg-gray-700">
+                <TableHead className="text-foreground dark:text-gray-200">#</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Item Name</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">HSN/SAC</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Qty</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Price</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Discount %</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Taxable Value</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">CGST %</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">SGST %</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">IGST %</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Total</TableHead>
+                <TableHead className="text-foreground dark:text-gray-200">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {fields.map((field, index) => (
+                <TableRow key={field.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    <Input {...register(`items.${index}.itemName`)} />
+                  </TableCell>
+                  <TableCell>
+                    <Input {...register(`items.${index}.hsnSac`)} />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.quantity`)}
+                      onChange={(e) => {
+                        register(`items.${index}.quantity`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.price`)}
+                      onChange={(e) => {
+                        register(`items.${index}.price`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.discount`)}
+                      onChange={(e) => {
+                        register(`items.${index}.discount`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      value={watch(`items.${index}.taxableValue`)}
+                      readOnly
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.cgst`)}
+                      onChange={(e) => {
+                        register(`items.${index}.cgst`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.sgst`)}
+                      onChange={(e) => {
+                        register(`items.${index}.sgst`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      {...register(`items.${index}.igst`)}
+                      onChange={(e) => {
+                        register(`items.${index}.igst`).onChange(e)
+                        calculateItemValues(index)
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      value={watch(`items.${index}.total`)}
+                      readOnly
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button type="button" onClick={() => remove(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items.map((item, index) => (
-                  <TableRow key={item.id} className="border-b dark:border-gray-700">
-                    <TableCell className="text-foreground dark:text-gray-300">{index + 1}</TableCell>
-                    <TableCell><Input type="text" value={item.itemName} onChange={(e) => updateItem(item.id, "itemName", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.quantity} onChange={(e) => updateItem(item.id, "quantity", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.price} onChange={(e) => updateItem(item.id, "price", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.discount} onChange={(e) => updateItem(item.id, "discount", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.taxableValue.toFixed(2)} readOnly className="bg-muted dark:bg-gray-600 dark:text-gray-300" /></TableCell>
-                    <TableCell><Input type="number" value={item.cgst} onChange={(e) => updateItem(item.id, "cgst", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.sgst} onChange={(e) => updateItem(item.id, "sgst", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.igst} onChange={(e) => updateItem(item.id, "igst", e.target.value)} className="bg-background dark:bg-gray-700 dark:text-gray-100" /></TableCell>
-                    <TableCell><Input type="number" value={item.total.toFixed(2)} readOnly className="bg-muted dark:bg-gray-600 dark:text-gray-300" /></TableCell>
-                    <TableCell>
-                      <Button variant="destructive" size="icon" onClick={() => removeRow(item.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+              ))}
+            </TableBody>
+          </Table>
 
-          <div className="flex gap-2">
-            <Button type="button" onClick={addRow} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Plus className="mr-2 h-4 w-4" /> Add Row
-            </Button>
-          </div>
+          <Button
+            type="button"
+            onClick={() => append({
+              id: uuidv4(),
+              itemName: "",
+              hsnSac: "",
+              quantity: 0,
+              price: 0,
+              discount: 0,
+              taxableValue: 0,
+              cgst: 0,
+              sgst: 0,
+              igst: 0,
+              total: 0
+            })}
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add Row
+          </Button>
 
           <div className="space-y-4 flex flex-col w-1/3 ml-auto">
             <div className="flex justify-between items-center">
-              <Label className="text-foreground dark:text-gray-200 font-medium">Sub Total</Label>
-              <Input type="number" value={calculateSubTotal().toFixed(2)} readOnly className="w-1/3 bg-muted dark:bg-gray-600 dark:text-gray-300" />
+              <Label>Sub Total</Label>
+              <Input type="number" value={calculateSubTotal()} readOnly />
             </div>
             <div className="flex justify-between items-center">
-              <Label className="text-foreground dark:text-gray-200 font-medium">Cash Discount</Label>
-              <Input type="number" value={cashDiscount} onChange={(e) => setCashDiscount(Number(e.target.value))} className="w-1/3 bg-background dark:bg-gray-700 dark:text-gray-100" />
+              <Label>Cash Discount</Label>
+              <Input {...register("cashDiscount")} type="number" />
             </div>
             <div className="flex justify-between items-center">
-              <Label className="text-foreground dark:text-gray-200 font-medium">Grand Total</Label>
-              <Input type="number" value={calculateGrandTotal().toFixed(2)} readOnly className="w-1/3 bg-muted dark:bg-gray-600 dark:text-gray-300" />
-            </div>
-            <div className="flex justify-between items-center">
-              <Label className="text-foreground dark:text-gray-200 font-medium">Amount Paid</Label>
-              <Input type="number" value={amountPaid} onChange={(e) => setAmountPaid(Number(e.target.value))} className="w-1/3 bg-background dark:bg-gray-700 dark:text-gray-100" />
+              <Label>Grand Total</Label>
+              <Input type="number" value={calculateGrandTotal()} readOnly />
             </div>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">SUBMIT</Button>
-      </CardFooter>
+        </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button type="submit" className="w-1/3 p-10 text-xl font-semibold">
+            SUBMIT
+          </Button>
+        </CardFooter>
+      </form>
     </Card>
   )
 }
-
