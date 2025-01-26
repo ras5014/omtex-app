@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id                 String         @id @default(cuid())
+  name               String         @unique
+  gstNumber          String         @unique
+  billingAddress     String
+  shippingAddress    String
+  outstandingBalance BigInt         @default(0)
+  SalesInvoice       SalesInvoice[]
+  Payments           Payments[]
+}
+
+model SalesInvoice {
+  invoiceNo           String                @id
+  date                DateTime              @default(now())
+  subTotal            BigInt
+  cashDiscount        BigInt
+  grandTotal          BigInt
+  Customer            Customer?             @relation(fields: [customerId], references: [id])
+  customerId          String?
+  SalesInvoiceDetails SalesInvoiceDetails[]
+}
+
+model SalesInvoiceDetails {
+  id                    String        @id @default(cuid())
+  invoiceNo             String
+  itemName              String
+  hsnSac                String
+  quantity              Int
+  price                 BigInt
+  discountPercent       Int
+  taxableValue          BigInt
+  cgstPercent           Int
+  sgstPercent           Int
+  igstPercent           Int
+  total                 BigInt
+  SalesInvoice          SalesInvoice? @relation(fields: [salesInvoiceInvoiceNo], references: [invoiceNo])
+  salesInvoiceInvoiceNo String?
+}
+
+model Payments {
+  id         String    @id @default(cuid())
+  date       DateTime  @default(now())
+  amount     BigInt
+  type       String
+  Customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+}
+
+model Item {
+  id                String @id @default(cuid())
+  name              String @unique
+  hsnSac            String
+  price             BigInt
+  cgstPercent       Int
+  sgstPercent       Int
+  igstPercent       Int
+  availableQuantity Int
+  unit              String
+}
