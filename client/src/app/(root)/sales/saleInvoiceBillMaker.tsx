@@ -9,34 +9,43 @@ import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { DatePicker } from "./DatePicker"
+import { formatDate } from "@/lib/utils"
+import { createInvoice } from "@/server-actions/sales/actions"
 
-interface FormValues {
-  date: Date
-  invoiceNumber: string
-  customer: string
-  gstNumber: string
-  billingAddress: string
-  shippingAddress: string
-  items: {
-    id: string
-    itemName: string
-    hsnSac: string
-    quantity: number
-    price: number
-    discount: number
-    taxableValue: number
-    cgst: number
-    sgst: number
-    igst: number
-    total: number
-  }[]
-  cashDiscount: number
-}
+type FormValues = {
+  date: Date;
+  invoiceNumber: string;
+  customer: string;
+  gstNumber: string;
+  billingAddress: string;
+  shippingAddress: string;
+  items: Array<{
+    id: string;
+    itemName: string;
+    hsnSac: string;
+    quantity: number;
+    price: number;
+    discount: number;
+    taxableValue: number;
+    cgst: number;
+    sgst: number;
+    igst: number;
+    total: number;
+  }>;
+  cashDiscount: number;
+  subTotal: number;
+  grandTotal: number;
+};
 
 export default function SalesInvoiceBillMaker() {
   const { register, control, handleSubmit, watch, setValue } = useForm<FormValues>({
     defaultValues: {
+      date: new Date(),
+      invoiceNumber: "",
+      customer: "",
+      gstNumber: "",
+      billingAddress: "",
+      shippingAddress: "",
       items: [{
         id: uuidv4(),
         itemName: "",
@@ -59,8 +68,8 @@ export default function SalesInvoiceBillMaker() {
     name: "items"
   })
 
-  const onSubmit = (data: FormValues) => {
-    console.log('Form Data:', data)
+  const onSubmit = (formData: FormValues) => {
+    createInvoice(formData);
   }
 
   const calculateItemValues = (index: number) => {
@@ -85,14 +94,13 @@ export default function SalesInvoiceBillMaker() {
     const grandTotal = calculateSubTotal() - (watch('cashDiscount') || 0);
     return Math.round(Math.abs(grandTotal));
   }
-
   return (
     <Card className="w-full dark:bg-inherit border-spacing-5 dark:border-gray-600 rounded-xl shadow-lg m-auto p-10">
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-4">
-              <DatePicker />
+              <Input type="date" {...register("date")} />
               <div className="space-y-2 flex items-center">
                 <Label className="w-1/3">Invoice #</Label>
                 <Input {...register("invoiceNumber")} className="w-2/3" />
@@ -250,7 +258,7 @@ export default function SalesInvoiceBillMaker() {
           <div className="space-y-4 flex flex-col w-1/3 ml-auto">
             <div className="flex justify-between items-center">
               <Label>Sub Total</Label>
-              <Input type="number" value={calculateSubTotal()} readOnly />
+              <Input type="number" value={calculateSubTotal()} {...register("subTotal")} readOnly />
             </div>
             <div className="flex justify-between items-center">
               <Label>Cash Discount</Label>
@@ -258,7 +266,7 @@ export default function SalesInvoiceBillMaker() {
             </div>
             <div className="flex justify-between items-center">
               <Label>Grand Total</Label>
-              <Input type="number" value={calculateGrandTotal()} readOnly />
+              <Input type="number" value={calculateGrandTotal()} {...register("grandTotal")} readOnly />
             </div>
           </div>
         </CardContent>

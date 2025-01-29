@@ -1,4 +1,4 @@
-import { InvoiceDialog } from "@/components/custom/sales/invoiceDialog";
+import { InvoiceDialog } from "@/app/(root)/sales/invoiceDialog";
 import { Button } from "@/components/ui/button";
 
 export default function page() {
