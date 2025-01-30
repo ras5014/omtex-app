@@ -9,8 +9,16 @@ import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { formatDate } from "@/lib/utils"
 import { createInvoice } from "@/server-actions/sales/actions"
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 type FormValues = {
   date: Date;
@@ -60,6 +68,8 @@ export default function SalesInvoiceBillMaker() {
         total: 0
       }],
       cashDiscount: 0,
+      subTotal: 0,
+      grandTotal: 0
     }
   })
 
@@ -69,6 +79,7 @@ export default function SalesInvoiceBillMaker() {
   })
 
   const onSubmit = (formData: FormValues) => {
+    console.log(formData);
     createInvoice(formData);
   }
 
@@ -87,13 +98,18 @@ export default function SalesInvoiceBillMaker() {
   }
 
   const calculateSubTotal = () => {
-    return watch('items').reduce((total, item) => total + (item.total || 0), 0)
+    const subTotal = watch('items').reduce((total, item) => total + (item.total || 0), 0);
+    setValue('subTotal', subTotal); // Add this line
+    return subTotal;
   }
 
   const calculateGrandTotal = () => {
     const grandTotal = calculateSubTotal() - (watch('cashDiscount') || 0);
-    return Math.round(Math.abs(grandTotal));
+    const roundedGrandTotal = Math.round(Math.abs(grandTotal));
+    setValue('grandTotal', roundedGrandTotal); // Add this line
+    return roundedGrandTotal;
   }
+
   return (
     <Card className="w-full dark:bg-inherit border-spacing-5 dark:border-gray-600 rounded-xl shadow-lg m-auto p-10">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -157,7 +173,7 @@ export default function SalesInvoiceBillMaker() {
                       type="number"
                       {...register(`items.${index}.quantity`)}
                       onChange={(e) => {
-                        register(`items.${index}.quantity`).onChange(e)
+                        register(`items.${index}.quantity`, { valueAsNumber: true }).onChange(e)
                         calculateItemValues(index)
                       }}
                     />
@@ -165,7 +181,7 @@ export default function SalesInvoiceBillMaker() {
                   <TableCell>
                     <Input
                       type="number"
-                      {...register(`items.${index}.price`)}
+                      {...register(`items.${index}.price`, { valueAsNumber: true })}
                       onChange={(e) => {
                         register(`items.${index}.price`).onChange(e)
                         calculateItemValues(index)
@@ -175,7 +191,7 @@ export default function SalesInvoiceBillMaker() {
                   <TableCell>
                     <Input
                       type="number"
-                      {...register(`items.${index}.discount`)}
+                      {...register(`items.${index}.discount`, { valueAsNumber: true })}
                       onChange={(e) => {
                         register(`items.${index}.discount`).onChange(e)
                         calculateItemValues(index)
@@ -262,7 +278,7 @@ export default function SalesInvoiceBillMaker() {
             </div>
             <div className="flex justify-between items-center">
               <Label>Cash Discount</Label>
-              <Input {...register("cashDiscount")} type="number" />
+              <Input {...register("cashDiscount", { valueAsNumber: true })} type="number" />
             </div>
             <div className="flex justify-between items-center">
               <Label>Grand Total</Label>

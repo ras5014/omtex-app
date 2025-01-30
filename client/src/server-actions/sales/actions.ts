@@ -1,10 +1,10 @@
 "use server";
 
-import prisma from "@/db/prisma";
+import { prisma } from "@/db/prisma";
 
-export async function createInvoice(formData: FormData) {
-  const date = formData.date;
-  const invoiceNumber = formData.invoiceNumber;
+export async function createInvoice(formData: any) {
+  // const date = formData.date;
+  const invoiceNo = formData.invoiceNumber;
   const customer = formData.customer;
   const gstNumber = formData.gstNumber;
   const billingAddress = formData.billingAddress;
@@ -13,20 +13,40 @@ export async function createInvoice(formData: FormData) {
   const cashDiscount = formData.cashDiscount;
   const subTotal = formData.subTotal;
   const grandTotal = formData.grandTotal;
-  
-  // Create invoice in the database
-  await prisma.SalesInvoice.create({
+
+  await prisma.salesInvoice.create({
     data: {
-      date,
-      invoiceNumber,
-      customer,
-      gstNumber,
-      billingAddress,
-      shippingAddress,
-      items,
-      cashDiscount,
+      invoiceNo,
+      // date,
       subTotal,
-      grandTotal
-    }
+      cashDiscount,
+      grandTotal,
+      Customer: {
+        connectOrCreate: {
+          where: { name: customer },
+          create: {
+            name: customer,
+            gstNumber,
+            billingAddress,
+            shippingAddress,
+          },
+        },
+      },
+      SalesInvoiceDetails: {
+        create: items.map((item: any) => ({
+          invoiceNo,
+          itemName: item.itemName,
+          hsnSac: item.hsnSac,
+          quantity: item.quantity,
+          price: item.price,
+          discountPercent: item.discount,
+          taxableValue: item.taxableValue,
+          cgstPercent: item.cgst,
+          sgstPercent: item.sgst,
+          igstPercent: item.igst,
+          total: item.total,
+        })),
+      },
+    },
   });
 }

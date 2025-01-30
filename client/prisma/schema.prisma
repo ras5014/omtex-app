@@ -58,7 +58,7 @@ model Payments {
   customerId String?
 }
 
-model Item {
+model Items {
   id                String @id @default(cuid())
   name              String @unique
   hsnSac            String
