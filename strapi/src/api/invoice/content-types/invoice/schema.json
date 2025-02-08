@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invoices",
+  "info": {
+    "singularName": "invoice",
+    "pluralName": "invoices",
+    "displayName": "invoice",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": {
+      "type": "date",
+      "required": false
+    },
+    "invoiceNo": {
+      "type": "string",
+      "required": true
+    },
+    "subTotal": {
+      "type": "decimal"
+    },
+    "cashDiscount": {
+      "type": "decimal"
+    },
+    "grandTotal": {
+      "type": "decimal"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Sale",
+        "Purchase"
+      ],
+      "required": true
+    },
+    "invoiceItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "component.invoice-items"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "gstNo": {
+      "type": "string"
+    }
+  }
+}

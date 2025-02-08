@@ -1,5 +1,5 @@
-import { InvoiceDialog } from "@/app/(root)/sales/invoiceDialog";
 import { Button } from "@/components/ui/button";
+import { InvoiceDialog } from "./components/InvoiceDialog";
 
 export default function page() {
     return (

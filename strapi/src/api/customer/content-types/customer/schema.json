@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "customer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "gstNo": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "text"
+    },
+    "shippingAddress": {
+      "type": "text"
+    },
+    "outStandingBalance": {
+      "type": "decimal",
+      "default": 0
+    }
+  }
+}
