@@ -11,6 +11,14 @@ import {
 import SalesInvoiceBillMaker from "./SalesInvoiceBillMaker"
 
 
+/**
+ * A dialog for creating a new invoice. It contains a form component which
+ * handles all the business logic of creating a new invoice. The form component
+ * is called SalesInvoiceBillMaker and is defined in the same directory as this
+ * component.
+ *
+ * @returns A dialog component which contains a form for creating a new invoice.
+ */
 export function InvoiceDialog() {
     return (
         <Dialog>

@@ -2,16 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label"; import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/custom/combobox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator"
-
-import InvoiceLeftSection from "./InvoiceLeftSection";
-
 import {
   Form,
   FormControl,
@@ -21,6 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import InvoiceLeftSection from "./InvoiceLeftSection";
+import InvoiceRightSection from "./InvoiceRightSection";
 
 export default function SalesInvoiceBillMaker() {
 
@@ -47,18 +43,7 @@ export default function SalesInvoiceBillMaker() {
             <InvoiceLeftSection control={form.control} />
 
             {/* Right Column */}
-
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label className="font-bold">Billing Address</Label>
-                <Textarea {...register("billingAddress")} placeholder="Enter billing address" className="h-24 bg-white" />
-              </div>
-              <div className="space-y-2">
-                <Label className="font-bold">Shipping Address</Label>
-                <Textarea {...register("shippingAddress")} placeholder="Enter shipping address" className="h-24 bg-white" />
-              </div>
-            </div>
+            <InvoiceRightSection control={form.control} />
           </div>
 
           <Separator />
