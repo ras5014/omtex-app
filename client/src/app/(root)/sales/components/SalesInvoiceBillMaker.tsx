@@ -1,34 +1,46 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"; import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/custom/combobox";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useForm, useFieldArray } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import InvoiceLeftSection from "./InvoiceLeftSection";
 import InvoiceRightSection from "./InvoiceRightSection";
+import InvoiceTableSection from "./InvoiceTableSection";
+import InvoiceDownSection from "./InvoiceDownSection";
 
 export default function SalesInvoiceBillMaker() {
 
   // React-Hook-Form Setup
   const form = useForm({
-    defaultValues: { date: "", invoiceNo: "", customer: "", gstNo: "", billingAddress: "", shippingAddress: "" },
+    defaultValues: {
+      date: "", invoiceNo: "", customer: "", gstNo: "", billingAddress: "", shippingAddress: "",
+      items: [{ itemName: "", hsnSac: "", qty: 0, price: 0, discountPercent: 0, taxableValue: 0, cgstPercent: 0, sgstPercent: 0, igstPercent: 0, total: 0 }],
+      subTotal: 0, cashDiscount: 0, grandTotal: 0,
+    },
   });
-  const { register, handleSubmit, formState: { errors }, reset } = form;
+  const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = form;
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "items",
+  });
 
   const onSubmit = (formData) => {
     console.log(formData);
   };
+
+  const calculateTotals = () => {
+    const items = watch('items');
+    const subTotal = items.reduce((total, item) =>
+      total + (Number(item.total) || 0), 0
+    );
+    setValue('subTotal', subTotal);
+
+    const grandTotal = subTotal - (Number(watch('cashDiscount')) || 0);
+    setValue('grandTotal', Math.round(grandTotal));
+  }
+
 
   return (
     <div className="p-5">
@@ -50,24 +62,10 @@ export default function SalesInvoiceBillMaker() {
 
 
           {/* Items Table */}
-          <Table>
-            <TableHeader className="bg-green-700">
-              <TableRow className="font-bold">
-                <TableHead className="text-foreground font-bold text-white">#</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Item</TableHead>
-                <TableHead className="text-foreground font-bold text-white">HSN</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Qty</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Price</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Discount %</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Taxable Value</TableHead>
-                <TableHead className="text-foreground font-bold text-white">CGST %</TableHead>
-                <TableHead className="text-foreground font-bold text-white">SGST %</TableHead>
-                <TableHead className="text-foreground font-bold text-white">IGST %</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Total</TableHead>
-                <TableHead className="text-foreground font-bold text-white">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-          </Table>
+          <InvoiceTableSection control={form.control} fields={fields} remove={remove} append={append} watch={watch} setValue={setValue} calculateTotals={calculateTotals} />
+
+          {/* Subtotal, Cash Discount, Grand Total */}
+          <InvoiceDownSection control={form.control} watch={watch} setValue={setValue} calculateTotals={calculateTotals} />
 
 
           {/* Buttons */}
