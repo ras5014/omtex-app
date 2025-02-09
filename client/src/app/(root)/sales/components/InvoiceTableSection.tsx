@@ -32,9 +32,9 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
     }
 
     return (
-        <div>
-            <Table>
-                <TableHeader className="bg-green-700">
+        <div className="overflow-x-auto">
+            <Table className="min-w-full">
+                <TableHeader className="bg-green-700 hidden md:table-header-group">
                     <TableRow className="font-bold">
                         <TableHead className="text-foreground font-bold text-white">#</TableHead>
                         <TableHead className="text-foreground font-bold text-white">Item</TableHead>
@@ -53,13 +53,15 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
 
                 <TableBody>
                     {fields.map((field, index) => (
-                        <TableRow key={index}>
-                            <TableCell>
+                        <TableRow key={index} className="block md:table-row mb-4 md:mb-0">
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">#</span>
                                 {index + 1}
                             </TableCell>
 
                             {/* itemName */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Item</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.itemName`}
@@ -75,7 +77,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* hsnSac */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">HSN</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.hsnSac`}
@@ -94,7 +97,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* qty */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Qty</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.qty`}
@@ -118,7 +122,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* Price */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Price</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.price`}
@@ -143,7 +148,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* discountPercent */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Discount %</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.discountPercent`}
@@ -168,7 +174,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* taxableValue */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Taxable Value</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.taxableValue`}
@@ -184,7 +191,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* cgstPercent */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">CGST %</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.cgstPercent`}
@@ -204,7 +212,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* sgstPercent */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">SGST %</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.sgstPercent`}
@@ -224,7 +233,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* igstPercent */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">IGST %</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.igstPercent`}
@@ -244,7 +254,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* total */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Total</span>
                                 <FormField
                                     control={control}
                                     name={`items.${index}.total`}
@@ -260,7 +271,8 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                             </TableCell>
 
                             {/* actions */}
-                            <TableCell>
+                            <TableCell className="block md:table-cell">
+                                <span className="md:hidden font-bold">Actions</span>
                                 <Button className="bg-red-500 hover:bg-red-700" type="button" onClick={() => { remove(index); calculateTotals() }}>
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
@@ -290,8 +302,5 @@ export default function InvoiceTableSection({ control, fields, remove, append, w
                 <Plus className="mr-2 h-4 w-4" /> Add Row
             </Button>
         </div>
-
-
     )
 }
-

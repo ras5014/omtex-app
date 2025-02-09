@@ -385,6 +385,7 @@ export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Unique;
     gstNo: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -395,6 +396,7 @@ export interface ApiCustomerCustomer extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     outStandingBalance: Schema.Attribute.Decimal &
       Schema.Attribute.DefaultTo<0>;
+    phone: Schema.Attribute.String & Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     shippingAddress: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;

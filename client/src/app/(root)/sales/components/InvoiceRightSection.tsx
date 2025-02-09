@@ -12,8 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 export default function InvoiceRightSection({ control }) {
     return (
 
-        <div className="space-y-4">
+        // <div className="space-y-4">
 
+        <>
             <FormField
                 control={control}
                 name="billingAddress"
@@ -21,7 +22,7 @@ export default function InvoiceRightSection({ control }) {
                     <FormItem>
                         <FormLabel className="font-bold">Billing Address</FormLabel>
                         <FormControl>
-                            <Textarea {...field} placeholder="Enter billing address" className="h-24 bg-white" />
+                            <Textarea {...field} placeholder="Enter billing address" className="h-[138px] bg-white" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -34,12 +35,13 @@ export default function InvoiceRightSection({ control }) {
                     <FormItem>
                         <FormLabel className="font-bold">Shipping Address</FormLabel>
                         <FormControl>
-                            <Textarea {...field} placeholder="Enter shipping address" className="h-24 bg-white" />
+                            <Textarea {...field} placeholder="Enter shipping address" className="h-[138px] bg-white" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )}
             />
-        </div>
+        </>
+        // </div>
     );
 }

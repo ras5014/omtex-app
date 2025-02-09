@@ -1,5 +1,8 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { InvoiceDialog } from "./components/InvoiceDialog";
+import ShowInvoiceTable from "./components/ShowInvoiceTable";
 
 export default function page() {
     return (
@@ -8,7 +11,9 @@ export default function page() {
                 <InvoiceDialog />
                 <Button className="font-bold">Create Estimate</Button>
             </div>
-            <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
+            <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+                <ShowInvoiceTable />
+            </div>
         </div>
     )
 }

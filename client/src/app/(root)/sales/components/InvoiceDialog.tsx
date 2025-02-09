@@ -25,7 +25,7 @@ export function InvoiceDialog() {
             <DialogTrigger asChild>
                 <Button className="font-bold">Create Invoice</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[80%] h-[80%] bg-muted/100 max-h-[100vh] overflow-y-auto bg-slate-200">
+            <DialogContent className="sm:max-w-[80%] h-[95%] bg-muted/100 max-h-[100vh] overflow-y-auto bg-slate-200">
                 <SalesInvoiceBillMaker />
             </DialogContent>
         </Dialog>

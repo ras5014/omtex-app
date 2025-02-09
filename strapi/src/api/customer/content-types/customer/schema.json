@@ -28,6 +28,14 @@
     "outStandingBalance": {
       "type": "decimal",
       "default": 0
+    },
+    "email": {
+      "type": "email",
+      "unique": true
+    },
+    "phone": {
+      "type": "string",
+      "unique": true
     }
   }
 }

@@ -8,6 +8,7 @@ import InvoiceLeftSection from "./InvoiceLeftSection";
 import InvoiceRightSection from "./InvoiceRightSection";
 import InvoiceTableSection from "./InvoiceTableSection";
 import InvoiceDownSection from "./InvoiceDownSection";
+import { createInvoice } from "@/server-actions/sales/actions";
 
 export default function SalesInvoiceBillMaker() {
 
@@ -27,7 +28,7 @@ export default function SalesInvoiceBillMaker() {
   });
 
   const onSubmit = (formData) => {
-    console.log(formData);
+    createInvoice(formData);
   };
 
   const calculateTotals = () => {
@@ -49,7 +50,7 @@ export default function SalesInvoiceBillMaker() {
 
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             {/* Left Column */}
             <InvoiceLeftSection control={form.control} />
@@ -70,10 +71,10 @@ export default function SalesInvoiceBillMaker() {
 
           {/* Buttons */}
           <div className="flex justify-end space-x-4">
-            <Button type="button" variant="secondary" onClick={() => reset()}>
+            <Button type="button" variant="secondary" onClick={() => reset()} className="transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-200 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-gray-200">
               Reset
             </Button>
-            <Button type="submit">Submit</Button>
+            <Button className="font-bold transition duration-150 ease-in-out hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:ring focus:ring-green-200 focus:ring-opacity-50 focus:ring-offset-2 focus:ring-offset-green-200" type="submit">Submit</Button>
           </div>
         </form>
       </Form>

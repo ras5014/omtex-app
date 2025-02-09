@@ -22,7 +22,7 @@ export default function InvoiceDownSection({ control, watch, setValue, calculate
                         name="subTotal"
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between space-x-4">
-                                <FormLabel className="w-1/3">Sub Total</FormLabel>
+                                <FormLabel className="w-1/3 font-bold">Sub Total</FormLabel>
                                 <FormControl className="w-2/3">
                                     <Input
                                         type="number"
@@ -42,7 +42,7 @@ export default function InvoiceDownSection({ control, watch, setValue, calculate
                         name="cashDiscount"
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between space-x-4">
-                                <FormLabel className="w-1/3">Cash Discount</FormLabel>
+                                <FormLabel className="w-1/3 font-bold">Cash Discount</FormLabel>
                                 <FormControl className="w-2/3">
                                     <Input
                                         type="number"
@@ -65,12 +65,12 @@ export default function InvoiceDownSection({ control, watch, setValue, calculate
                         name="grandTotal"
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between space-x-4">
-                                <FormLabel className="w-1/3">Grand Total</FormLabel>
+                                <FormLabel className="w-1/3 font-bold">Grand Total</FormLabel>
                                 <FormControl className="w-2/3">
                                     <Input
                                         type="number"
                                         {...field}
-                                        className="bg-white"
+                                        className="bg-slate-200 font-bold text-green-900"
                                         readOnly
                                         value={watch("grandTotal")}
                                     />
