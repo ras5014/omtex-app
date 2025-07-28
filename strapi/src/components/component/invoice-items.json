@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_component_invoice_items",
+  "info": {
+    "displayName": "InvoiceItems",
+    "icon": "archive",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "hsnSac": {
+      "type": "string"
+    },
+    "qty": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "discountPercent": {
+      "type": "decimal"
+    },
+    "taxableValue": {
+      "type": "decimal"
+    },
+    "cgstPercent": {
+      "type": "decimal"
+    },
+    "sgstPercent": {
+      "type": "decimal"
+    },
+    "igstPercent": {
+      "type": "decimal"
+    },
+    "total": {
+      "type": "decimal"
+    }
+  }
+}

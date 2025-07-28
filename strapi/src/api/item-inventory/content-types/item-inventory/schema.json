@@ -1,0 +1,75 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_inventories",
+  "info": {
+    "singularName": "item-inventory",
+    "pluralName": "item-inventories",
+    "displayName": "itemInventory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "unit": {
+      "type": "enumeration",
+      "enum": [
+        "Piece (pcs)",
+        "Box (box)",
+        "Meter (m)",
+        "Roll (roll)",
+        "Bundle (bundle)"
+      ]
+    },
+    "availableStock": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Raw",
+        "Finished"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "costPrice": {
+      "type": "decimal",
+      "min": 0
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "hsnSac": {
+      "type": "string"
+    },
+    "cgstPercent": {
+      "type": "decimal"
+    },
+    "sgstPercent": {
+      "type": "decimal"
+    },
+    "igstPercent": {
+      "type": "decimal"
+    },
+    "discountPercent": {
+      "type": "decimal"
+    }
+  }
+}
