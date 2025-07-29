@@ -35,10 +35,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/* Dark mode toggle positioned at the rightmost side */}
-            <div className="fixed top-2 right-2 z-99">
-              <ModeToggle />
-            </div>
+            <header>
+              {/* Dark mode toggle positioned at the rightmost side */}
+              <div className="fixed top-2 right-2 z-99">
+                <ModeToggle />
+              </div>
+            </header>
             <main>{children}</main>
             <Toaster position="top-center" />
           </ThemeProvider>

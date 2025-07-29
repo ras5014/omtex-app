@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,11 +19,14 @@ import {
 } from "@/components/ui/form";
 import toast from "react-hot-toast";
 import { authActions } from "@/actions/auth-actions";
+import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const router = useRouter();
   // Zod schema
   const formSchema = z.object({
     identifier: z.string().email({
@@ -42,14 +46,29 @@ export function LoginForm({
     },
   });
 
+  // Loader State
+  const [loading, setLoading] = useState(false);
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // ✅ This will be type-safe and validated.
-    toast.success("Login successful!");
-    console.log(values);
     // Auth Server Action
-    authActions(values);
+    try {
+      setLoading(true);
+      await authActions(values);
+      toast.success("Login successful!");
+      // Redirect to dashboard or home page after successful login
+      setLoading(false);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+      setLoading(false);
+    }
   }
 
   return (
@@ -101,8 +120,8 @@ export function LoginForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Login
+            <Button type="submit" className="w-full" disabled={loading}>
+              Login {loading && <Loader className="ml-2 animate-spin" />}
             </Button>
           </form>
         </Form>
