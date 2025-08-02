@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import toast from "react-hot-toast";
-import { authActions } from "@/actions/auth-actions";
+import { authActions } from "@/server-actions/auth-actions";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 
