@@ -7,7 +7,7 @@ const Purchases = () => {
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="flex rounded-xl bg-muted/50 p-6 justify-between h-20 items-center">
         <div>
-          <h1 className="headline">Purchase Invoices</h1>
+          <h1 className="headline">PURCHASE INVOICE</h1>
         </div>
         <div className="flex gap-10">
           <Button className="font-bold">Create Estimate</Button>

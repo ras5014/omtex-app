@@ -52,7 +52,7 @@ export default function InvoiceTableSection({
   return (
     <div className="overflow-x-auto">
       <Table className="min-w-full">
-        <TableHeader className="bg-green-700 hidden md:table-header-group">
+        <TableHeader className="bg-gradient-to-r from-blue-600 to-purple-600 hidden md:table-header-group">
           <TableRow className="font-bold">
             <TableHead className="text-foreground font-bold text-white">
               #

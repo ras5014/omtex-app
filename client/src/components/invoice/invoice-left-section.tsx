@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/custom/combobox";
 import { useCustomers } from "@/hooks/useCustomer";
+import { DatePicker } from "../custom/date-picker";
 
 export default function InvoiceLeftSection({ control, setValue }) {
   // Fetch customers from the API
@@ -25,7 +26,7 @@ export default function InvoiceLeftSection({ control, setValue }) {
             <FormItem>
               <FormLabel className="font-bold">Date</FormLabel>
               <FormControl>
-                <Input type="date" {...field} className="bg-white h-[40px]" />
+                <DatePicker />
               </FormControl>
               <FormMessage />
             </FormItem>

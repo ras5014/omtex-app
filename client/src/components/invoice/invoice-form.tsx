@@ -10,6 +10,7 @@ import InvoiceRightSection from "./invoice-right-section";
 import InvoiceTableSection from "./invoice-table-section";
 import InvoiceLeftSection from "./invoice-left-section";
 import InvoiceBottomSection from "./invoice-bottom-section";
+import toast from "react-hot-toast";
 
 export default function SalesInvoiceBillMaker() {
   // Inside Parent form component child form components are there, so If We submit them then parent form will also get submitted.
@@ -57,9 +58,10 @@ export default function SalesInvoiceBillMaker() {
     name: "items",
   });
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     if (isSubmitting === false) return;
     console.log("FormData: ", formData);
+    toast.success("Invoice created successfully!");
     // createInvoice(formData);
     setIsSubmitting(false);
   };
@@ -78,10 +80,8 @@ export default function SalesInvoiceBillMaker() {
 
   return (
     <div className="p-5">
-      <h1 className="text-2xl font-bold mb-4 text-green-700 text-center">
-        Sales Invoice Bill Maker
-      </h1>
-      <Separator className="my-4" />
+      <h1 className="headline">SALES INVOICE FORM</h1>
+      <Separator className="my-6" />
 
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
