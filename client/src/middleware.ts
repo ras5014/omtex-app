@@ -18,9 +18,9 @@ function isTokenExpired(token: string): boolean {
   }
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const cookieStore = cookies();
-  const token = cookieStore.get("jwt");
+  const token = await cookieStore.get("jwt");
 
   if (!token || isTokenExpired(token.value)) {
     return NextResponse.redirect(new URL("/login", request.url));
