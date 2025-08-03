@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePicker() {
+export function DatePicker({ value, onChange }) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
@@ -35,6 +35,9 @@ export function DatePicker() {
             selected={date}
             captionLayout="dropdown"
             onSelect={(date) => {
+              date = new Date(date);
+              const formattedDate = date.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
+              onChange(formattedDate);
               setDate(date);
               setOpen(false);
             }}

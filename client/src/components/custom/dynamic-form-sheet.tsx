@@ -25,7 +25,7 @@ export function DynamicFormSheet({ labelName }) {
         <SheetHeader>
           <SheetTitle>Create {labelName}</SheetTitle>
           <SheetDescription>
-            Create a new {labelName} here. Click save when you're done.
+            Create a new {labelName} here. Click save when you&#39;re done.
           </SheetDescription>
         </SheetHeader>
         {/* Render Forms for respective labelName */}

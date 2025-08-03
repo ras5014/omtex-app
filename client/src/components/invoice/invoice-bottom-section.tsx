@@ -73,7 +73,7 @@ export default function InvoiceBottomSection({
                   <Input
                     type="number"
                     {...field}
-                    className="bg-slate-200 font-bold text-green-900"
+                    className="font-bold"
                     readOnly
                     value={watch("grandTotal")}
                   />

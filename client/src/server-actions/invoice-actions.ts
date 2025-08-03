@@ -1,45 +1,55 @@
 "use server";
 
 import { api } from "@/lib/axios";
+import { handleStrapiRequest } from "@/lib/utils";
+import qs from "qs";
 
-export async function createInvoice(formData) {
+export async function createSalesInvoice(formData) {
   console.log(formData);
 
-  // Customer Details
-  const customerData = {
-    name: formData.get("customer"),
-    gstNo: formData.get("gstNo"),
-    billingAddress: formData.get("billingAddress"),
-    shippingAddress: formData.get("shippingAddress"),
+  // Get the customer's documentId
+  const query = qs.stringify({
+    filters: {
+      name: {
+        $eq: formData["customer"],
+      },
+    },
+    fields: ["documentId"],
+  });
+  const { data } = await api.get(`/customers?${query}`);
+  const customerDocumentId = data?.data[0]?.documentId || null;
+
+  // Exclude billingAddress and shippingAddress from formData
+  const { billingAddress, shippingAddress, ...rest } = formData;
+
+  // Create the invoice
+  const invoiceData = {
+    ...rest,
+    type: "sales",
+    customer: customerDocumentId,
   };
+
+  console.log(invoiceData);
+
+  return handleStrapiRequest(
+    () => api.post("/invoices", { data: invoiceData }),
+    "Invoice created successfully",
+    "Invoice"
+  );
 }
 
 export async function createCustomer(formData) {
-  try {
-    // Call the API to create a customer
-    const res = await api.post("/customers", {
-      data: formData,
-    });
-
-    if (res.status === 201) {
-      return { success: true, message: "Customer created successfully" };
-    }
-  } catch (error) {
-    console.error(error);
-    return { success: false, message: "Failed to create customer" };
-  }
+  return handleStrapiRequest(
+    () => api.post("/customers", { data: formData }),
+    "Customer created successfully",
+    "Customer"
+  );
 }
 
 export async function createItem(formData) {
-  try {
-    const res = await api.post("/item-inventories", {
-      data: formData,
-    });
-
-    if (res.status === 201) {
-      return { success: true, message: "Item created successfully" };
-    }
-  } catch (error) {
-    return { success: false, message: "Failed to create item" };
-  }
+  return handleStrapiRequest(
+    () => api.post("/item-inventories", { data: formData }),
+    "Item created successfully",
+    "Item"
+  );
 }

@@ -30,10 +30,13 @@ import {
 import { createCustomer, createItem } from "@/server-actions/invoice-actions";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 
 export default function CreateDynamicForm({ schema, labelName }) {
   const form = useForm();
   const { handleSubmit, control } = form;
+  // Loader State
+  const [loading, setLoading] = useState(false);
 
   // Inside the component:
   const [sortedFields, setSortedFields] = useState([]);
@@ -66,22 +69,27 @@ export default function CreateDynamicForm({ schema, labelName }) {
 
   const queryClient = useQueryClient();
 
-  const onSubmit = async (formData) => {
+  const onSubmit = async (formData: unknown) => {
+    setLoading(true);
     if (labelName === "Customer") {
       const res = await createCustomer(formData);
       if (res.success) {
         toast.success(res.message);
         queryClient.invalidateQueries({ queryKey: ["customers"] }); // This trigger a refresh from parent component
+        setLoading(false);
       } else {
         toast.error(res.message);
+        setLoading(false);
       }
     } else if (labelName === "Item") {
       const res = await createItem(formData);
       if (res.success) {
         toast.success(res.message);
         queryClient.invalidateQueries({ queryKey: ["items"] }); // This trigger a refresh from parent component
+        setLoading(false);
       } else {
         toast.error(res.message);
+        setLoading(false);
       }
     }
   };
@@ -89,9 +97,10 @@ export default function CreateDynamicForm({ schema, labelName }) {
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 mt-10 mb-10 max-h-[800px] overflow-y-auto">
+        <div className="space-y-4 mt-10 mb-10 max-h-[800px] overflow-y-auto p-6">
           {sortedFields.map(([key, value]) => (
             <FormField
+              key={key}
               control={control}
               name={key}
               render={({ field }) => (
@@ -177,7 +186,10 @@ export default function CreateDynamicForm({ schema, labelName }) {
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">
+              Save {labelName}{" "}
+              {loading && <Loader className="ml-2 animate-spin" />}
+            </Button>
           </SheetClose>
         </SheetFooter>
       </form>

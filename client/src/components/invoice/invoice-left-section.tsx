@@ -26,7 +26,7 @@ export default function InvoiceLeftSection({ control, setValue }) {
             <FormItem>
               <FormLabel className="font-bold">Date</FormLabel>
               <FormControl>
-                <DatePicker />
+                <DatePicker value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
