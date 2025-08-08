@@ -42,7 +42,7 @@ export function Combobox({
             className="w-full h-[40px] justify-between"
           >
             {value
-              ? frameworks.find((framework) => framework.name === value)?.name
+              ? frameworks?.find((framework) => framework.name === value)?.name
               : `Select ${labelName}`}
             <ChevronsUpDown className="opacity-50" />
           </Button>
@@ -60,7 +60,7 @@ export function Combobox({
                 {isLoading ? (
                   <Spinner />
                 ) : (
-                  frameworks.map((framework) => (
+                  frameworks?.map((framework) => (
                     <CommandItem
                       key={framework.documentId}
                       value={framework.name}

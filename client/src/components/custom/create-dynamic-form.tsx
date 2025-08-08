@@ -53,6 +53,7 @@ export default function CreateDynamicForm({ schema, labelName }) {
      */
 
     const getSortedFields = (tableName) => {
+      if (!schema) return;
       const filteredAndSorted = Object.entries(schema)
         .filter(([key]) => !tableName.excludeFields.includes(key))
         .sort(([keyA], [keyB]) => {
@@ -97,7 +98,7 @@ export default function CreateDynamicForm({ schema, labelName }) {
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 mt-10 mb-10 max-h-[800px] overflow-y-auto p-6">
+        <div className="space-y-4 mt-10 mb-10 max-h-[600px] overflow-y-auto p-6">
           {sortedFields.map(([key, value]) => (
             <FormField
               key={key}

@@ -1,10 +1,16 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import InvoiceForm from "./invoice-form";
 
 export function InvoiceDialog({ type }) {
   return (
     <Dialog>
+      <DialogTitle></DialogTitle>
       <DialogTrigger asChild>
         <Button className="font-bold">Create Invoice</Button>
       </DialogTrigger>
