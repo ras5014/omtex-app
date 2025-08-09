@@ -34,11 +34,20 @@ export function DatePicker({ value, onChange }) {
             mode="single"
             selected={date}
             captionLayout="dropdown"
-            onSelect={(date) => {
-              date = new Date(date);
-              const formattedDate = date.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
+            onSelect={(selectedDate) => {
+              if (!selectedDate) return;
+
+              // Format to YYYY-MM-DD without timezone shift
+              const year = selectedDate.getFullYear();
+              const month = String(selectedDate.getMonth() + 1).padStart(
+                2,
+                "0"
+              );
+              const day = String(selectedDate.getDate()).padStart(2, "0");
+              const formattedDate = `${year}-${month}-${day}`;
+
               onChange(formattedDate);
-              setDate(date);
+              setDate(selectedDate);
               setOpen(false);
             }}
           />

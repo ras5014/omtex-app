@@ -1,7 +1,8 @@
 "use server";
 
 import { api } from "@/lib/axios";
-import { handleStrapiRequest } from "@/lib/utils";
+import { formatDate, handleStrapiRequest } from "@/lib/utils";
+import axios from "axios";
 import qs from "qs";
 
 export async function createSalesInvoice(formData) {
@@ -16,16 +17,16 @@ export async function createSalesInvoice(formData) {
     },
     fields: ["documentId"],
   });
-  const { data } = await api.get(`/customers?${query}`);
-  const customerDocumentId = data?.data[0]?.documentId || null;
+  const { data: customerData } = await api.get(`/customers?${query}`);
+  const customerDocumentId = customerData?.data[0]?.documentId || null;
 
   // Exclude billingAddress and shippingAddress from formData
-  const { billingAddress, shippingAddress, ...rest } = formData;
+  const { billingAddress, shippingAddress, gstNo, ...rest } = formData;
 
   // Create the invoice
   const invoiceData = {
     ...rest,
-    type: "sales",
+    type: "Sale",
     customer: customerDocumentId,
   };
 

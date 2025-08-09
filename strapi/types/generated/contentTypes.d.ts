@@ -430,7 +430,9 @@ export interface ApiInvoiceInvoice extends Struct.CollectionTypeSchema {
     customer: Schema.Attribute.Relation<'oneToOne', 'api::customer.customer'>;
     date: Schema.Attribute.Date;
     grandTotal: Schema.Attribute.Decimal;
-    invoiceNo: Schema.Attribute.String & Schema.Attribute.Required;
+    invoiceNo: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     items: Schema.Attribute.Component<'component.invoice-items', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

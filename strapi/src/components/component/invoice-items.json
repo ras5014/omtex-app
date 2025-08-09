@@ -10,7 +10,7 @@
     "itemName": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "hsnSac": {
       "type": "string"
