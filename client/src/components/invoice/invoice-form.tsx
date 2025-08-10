@@ -64,6 +64,9 @@ export default function SalesInvoiceBillMaker() {
     const response = await createSalesInvoice(formData);
     if (response.success) {
       toast.success(response.message);
+      setTimeout(() => {
+        window.location.href = "/invoice/sales";
+      }, 1000);
     } else {
       toast.error(response.message);
     }

@@ -15,10 +15,10 @@ export async function handleStrapiRequest(
     const res = await requestFn();
 
     if (res.status === 201) {
-      return { success: true, message: successMessage };
+      return { success: true, message: successMessage, data: res?.data || {} };
     }
 
-    return { success: true, message: successMessage };
+    return { success: true, message: successMessage, data: res?.data || {} };
   } catch (error: unknown) {
     console.error(error);
 

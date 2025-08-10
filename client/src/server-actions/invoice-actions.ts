@@ -1,8 +1,7 @@
 "use server";
 
 import { api } from "@/lib/axios";
-import { formatDate, handleStrapiRequest } from "@/lib/utils";
-import axios from "axios";
+import { handleStrapiRequest } from "@/lib/utils";
 import qs from "qs";
 
 export async function createSalesInvoice(formData) {
@@ -32,6 +31,10 @@ export async function createSalesInvoice(formData) {
 
   console.log(invoiceData);
 
+  // Temp Logic, Later add zod schema to fix
+  invoiceData.invoiceNo =
+    invoiceData.invoiceNo === "" ? null : invoiceData.invoiceNo;
+
   return handleStrapiRequest(
     () => api.post("/invoices", { data: invoiceData }),
     "Invoice created successfully",
@@ -52,5 +55,27 @@ export async function createItem(formData) {
     () => api.post("/item-inventories", { data: formData }),
     "Item created successfully",
     "Item"
+  );
+}
+
+export async function getAllInvoice() {
+  const query = qs.stringify({
+    filters: {
+      type: {
+        $eq: "Sale",
+      },
+    },
+    fields: ["date", "invoiceNo", "grandTotal"],
+    populate: {
+      customer: {
+        fields: ["name"],
+      },
+    },
+  });
+
+  return handleStrapiRequest(
+    () => api.get(`/invoices?${query}`),
+    "Invoices fetched successfully",
+    "Invoice"
   );
 }
