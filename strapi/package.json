@@ -6,8 +6,8 @@
   "scripts": {
     "build": "strapi build",
     "deploy": "strapi deploy",
-    "start:prod": "strapi start",
-    "develop": "strapi develop --env-file .env.local",
+    "start:production": "strapi start",
+    "develop:local": "strapi develop",
     "strapi": "strapi"
   },
   "dependencies": {
