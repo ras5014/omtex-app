@@ -71,6 +71,7 @@ export async function getAllInvoice() {
         fields: ["name"],
       },
     },
+    sort: ["date:desc"],
   });
 
   return handleStrapiRequest(

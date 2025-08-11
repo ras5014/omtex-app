@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { InvoiceViewDetails } from "./invoice-view-details";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -70,12 +71,8 @@ export const columns: ColumnDef<Invoice>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                console.log("View Details clicked", { id: invoice.documentId })
-              }
-            >
-              View Details
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <InvoiceViewDetails id={invoice.documentId} />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log("Edit clicked")}>
