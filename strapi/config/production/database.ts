@@ -1,5 +1,5 @@
 export default ({ env }) => {
-  const client = process.env.DATABASE_CLIENT;
+  const client = env("DATABASE_CLIENT", "postgres");
 
   const connections = {
     postgres: {
