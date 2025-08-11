@@ -18,7 +18,8 @@
     },
     "invoiceNo": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "type": {
       "type": "enumeration",
@@ -33,10 +34,7 @@
       "relation": "oneToOne",
       "target": "api::customer.customer"
     },
-    "gstNo": {
-      "type": "string"
-    },
-    "invoiceItems": {
+    "items": {
       "type": "component",
       "component": "component.invoice-items",
       "repeatable": true
@@ -49,11 +47,6 @@
     },
     "grandTotal": {
       "type": "decimal"
-    },
-    "includeInGST": {
-      "type": "boolean",
-      "required": true,
-      "default": true
     }
   }
 }

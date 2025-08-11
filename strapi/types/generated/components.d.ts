@@ -12,9 +12,7 @@ export interface ComponentInvoiceItems extends Struct.ComponentSchema {
     discountPercent: Schema.Attribute.Decimal;
     hsnSac: Schema.Attribute.String;
     igstPercent: Schema.Attribute.Decimal;
-    name: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    itemName: Schema.Attribute.String & Schema.Attribute.Required;
     price: Schema.Attribute.Decimal;
     qty: Schema.Attribute.Integer;
     sgstPercent: Schema.Attribute.Decimal;

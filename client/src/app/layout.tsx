@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/dark-mode-toggle-button";
 import { Toaster } from "react-hot-toast";
+import { TanstackProvider } from "@/components/providers/tanstack-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <body>
+        <body suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -41,8 +42,10 @@ export default function RootLayout({
                 <ModeToggle />
               </div>
             </header>
-            <main>{children}</main>
-            <Toaster position="top-center" />
+            <TanstackProvider>
+              <main>{children}</main>
+              <Toaster position="top-center" />
+            </TanstackProvider>
           </ThemeProvider>
         </body>
       </html>
