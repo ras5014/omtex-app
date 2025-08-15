@@ -18,8 +18,9 @@ import { InvoiceViewDetails } from "./invoice-view-details";
 // You can use a Zod schema here if you want.
 export type Invoice = {
   id: string;
+  documentId: string;
   date: string;
-  invoiceNo: String;
+  invoiceNo: string;
   customer: {
     name: string;
   };

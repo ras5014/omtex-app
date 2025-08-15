@@ -69,6 +69,7 @@ const data = {
     },
     {
       title: "Invoices",
+      url: "/invoice", // Added URL to fix type error
       icon: SquareTerminal,
       isActive: true,
       items: [
