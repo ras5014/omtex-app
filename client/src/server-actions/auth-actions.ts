@@ -3,11 +3,12 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-const strapiBaseUrl = process.env.STRAPI_BASE_URL || "http://localhost:1337";
+const strapiBaseUrl =
+  process.env.STRAPI_BASE_URL || "http://localhost:1337/api";
 
 export const authActions = async (formData: unknown) => {
   try {
-    const response = await fetch(`${strapiBaseUrl}/api/auth/local`, {
+    const response = await fetch(`${strapiBaseUrl}/auth/local`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
