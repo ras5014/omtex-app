@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { clientApi } from "@/lib/axios";
 import qs from "qs";
 
 const fetchCustomers = async () => {
@@ -9,7 +9,7 @@ const fetchCustomers = async () => {
     },
     { encodeValuesOnly: true }
   );
-  const { data } = await api.get(`/customers?${query}`);
+  const { data } = await clientApi.get(`/customers?${query}`);
   return data.data;
 };
 

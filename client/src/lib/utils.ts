@@ -56,6 +56,13 @@ export async function handleStrapiRequest(
         };
       }
 
+      if (status === 403) {
+        return {
+          success: false,
+          message: "Forbidden. Please check your authentication or permissions",
+        };
+      }
+
       if (status === 422) {
         // Strapi validation errors
         if (data.error && data.error.details) {

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { clientApi } from "@/lib/axios";
 import qs from "qs";
 
 const fetchItems = async () => {
@@ -16,7 +16,7 @@ const fetchItems = async () => {
     },
     { encodeValuesOnly: true }
   );
-  const { data } = await api.get(`/item-inventories?${query}`);
+  const { data } = await clientApi.get(`/item-inventories?${query}`);
   return data.data;
 };
 

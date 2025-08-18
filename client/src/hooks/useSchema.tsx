@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/axios";
+import { clientApi } from "@/lib/axios";
 import { getContentTypeSchemaMapping } from "@/config/constants";
 
 const fetchSchema = async (contentType) => {
   const schema = await getContentTypeSchemaMapping[contentType];
-  const { data } = await api.get(
+  const { data } = await clientApi.get(
     `/content-type-builder/content-types/${schema}`
   );
   return data.data.schema?.attributes || {};

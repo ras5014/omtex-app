@@ -3,8 +3,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-const strapiBaseUrl =
-  process.env.NEXT_PUBLIC_STRAPI_BASE_URL || "http://localhost:1337/api";
+const strapiBaseUrl = process.env.STRAPI_BASE_URL;
 
 export const authActions = async (formData: unknown) => {
   try {
