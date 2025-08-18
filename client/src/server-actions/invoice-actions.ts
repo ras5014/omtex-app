@@ -2,6 +2,7 @@
 
 import { api } from "@/lib/axios";
 import { handleStrapiRequest } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 import qs from "qs";
 
 export async function createSalesInvoice(formData) {
@@ -35,11 +36,15 @@ export async function createSalesInvoice(formData) {
   invoiceData.invoiceNo =
     invoiceData.invoiceNo === "" ? null : invoiceData.invoiceNo;
 
-  return handleStrapiRequest(
+  const result = await handleStrapiRequest(
     () => api.post("/invoices", { data: invoiceData }),
     "Invoice created successfully",
     "Invoice"
   );
+
+  revalidatePath("/invoices");
+
+  return result;
 }
 
 export async function createCustomer(formData) {
