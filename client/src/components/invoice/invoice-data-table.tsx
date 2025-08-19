@@ -1,3 +1,5 @@
+"use client";
+
 import { columns, Invoice } from "./columns";
 import { DataTable } from "../ui/data-table";
 import { getAllInvoice } from "@/server-actions/invoice-actions";
