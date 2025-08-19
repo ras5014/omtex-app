@@ -42,6 +42,7 @@ export async function createSalesInvoice(formData) {
     "Invoice"
   );
 
+  getAllInvoice();
   revalidatePath("/invoices/sales");
 
   return result;
