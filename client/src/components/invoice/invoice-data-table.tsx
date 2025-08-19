@@ -1,4 +1,4 @@
-"use client";
+export const fetchCache = "force-no-store";
 
 import { columns, Invoice } from "./columns";
 import { DataTable } from "../ui/data-table";
