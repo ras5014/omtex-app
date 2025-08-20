@@ -1,7 +1,3 @@
-import { ModeToggle } from "../components/mode-toggle";
-import DashboardLayout from "../layouts/dashboard-layout";
-import { ThemeProvider } from "@/components/theme-provider";
-
 function Home() {
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
