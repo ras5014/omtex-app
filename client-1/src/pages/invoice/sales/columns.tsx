@@ -17,7 +17,7 @@ import { InvoiceViewDetails } from "@/components/pdf-view/invoice-view-details";
 export type Invoice = {
     id: string;
     documentId: string;
-    date: string;
+    date: Date;
     invoiceNo: string;
     customer: {
         name: string;

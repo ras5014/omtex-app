@@ -6,7 +6,13 @@ import { RouterProvider } from "react-router/dom";
 import LoginPage from "./pages/login.tsx";
 import DashboardLayout from "./layouts/dashboard-layout.tsx";
 import AuthLayout from "./layouts/auth-layout.tsx";
-import Sales from "./pages/invoice/sales.tsx";
+import Sales from "./pages/invoice/sales/sales.tsx";
+// React Query Setup
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
+
 
 const router = createBrowserRouter([
   {
@@ -36,5 +42,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );
