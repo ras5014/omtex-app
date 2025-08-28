@@ -14,7 +14,7 @@ export async function handleStrapiRequest(
   try {
     const res = await requestFn();
 
-    if (res.status === 201) {
+    if (res.status === 201 || res.status === 200) {
       return { success: true, message: successMessage, data: res?.data || {} };
     }
 

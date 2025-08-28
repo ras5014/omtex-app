@@ -17,8 +17,11 @@ export async function createSalesInvoice(formData) {
     },
     fields: ["documentId"],
   });
+  console.log("Customer query:", query);
   const { data: customerData } = await api.get(`/customers?${query}`);
+  console.log("Customer data:", customerData);
   const customerDocumentId = customerData?.data[0]?.documentId || null;
+  console.log("Customer documentId:", customerDocumentId);
 
   // Exclude billingAddress and shippingAddress from formData
   const { billingAddress, shippingAddress, gstNo, ...rest } = formData;
@@ -33,8 +36,11 @@ export async function createSalesInvoice(formData) {
   console.log(invoiceData);
 
   // Temp Logic, Later add zod schema to fix
-  invoiceData.invoiceNo =
-    invoiceData.invoiceNo === "" ? null : invoiceData.invoiceNo;
+  if (invoiceData.invoiceNo === "") {
+    // Generate a unique invoice number if none provided
+    const timestamp = Date.now();
+    invoiceData.invoiceNo = `INV-${timestamp}`;
+  }
 
   const result = await handleStrapiRequest(
     () => api.post("/invoices", { data: invoiceData }),
@@ -42,8 +48,9 @@ export async function createSalesInvoice(formData) {
     "Invoice"
   );
 
-  getAllInvoice();
-  revalidatePath("/invoices/sales");
+  console.log("Invoice creation result:", result);
+
+  revalidatePath("/invoice/sales");
 
   return result;
 }
@@ -71,7 +78,7 @@ export async function getAllInvoice() {
         $eq: "Sale",
       },
     },
-    fields: ["date", "invoiceNo", "grandTotal"],
+    fields: ["id", "date", "invoiceNo", "grandTotal", "documentId"],
     populate: {
       customer: {
         fields: ["name"],
@@ -80,9 +87,15 @@ export async function getAllInvoice() {
     sort: ["date:desc"],
   });
 
-  return handleStrapiRequest(
+  console.log("Query string:", query);
+
+  const result = await handleStrapiRequest(
     () => api.get(`/invoices?${query}`),
     "Invoices fetched successfully",
     "Invoice"
   );
+
+  console.log("getAllInvoice result:", result);
+
+  return result;
 }

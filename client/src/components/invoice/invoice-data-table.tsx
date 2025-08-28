@@ -8,13 +8,18 @@ async function getData() {
   // Fetch data from your API here.
   const response = await getAllInvoice();
 
+  console.log("getData response:", response);
+
   // Check if the response indicates success
   if (response?.success === false) {
     return { data: [], error: response.message };
   }
 
   // Return the data if successful
-  return { data: response?.data?.data || [], error: null };
+  const data = response?.data?.data || [];
+  console.log("Extracted data:", data);
+
+  return { data, error: null };
 }
 
 export default async function InvoiceDataTable({ type }) {
@@ -33,6 +38,11 @@ export default async function InvoiceDataTable({ type }) {
       </div>
     );
   }
+
+  // Debug: Log the data being received
+  console.log("Invoice data received:", data);
+  console.log("Data length:", data?.length);
+  console.log("Data structure:", JSON.stringify(data, null, 2));
 
   return (
     <div className="container mx-auto p-5">
